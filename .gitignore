@@ -2,13 +2,18 @@ release
 xcode
 debug
 build
+bin/
+lib/
 .mtime_cache
 *.DS_Store
+*.log
 Notebooks/blocksci
 *.so
 *.dylib
 *.pyc
+__pycache__/
 include/blocksci/external
+include/blocksci/blocksci_export.h
 python/blocksci/pybind11
 *.egg-info
 blockscipy/dist/*
@@ -16,5 +21,8 @@ blockscipy/dist/*
 .idea
 .benchmarks
 result
+result-*
 .nix-install
 .nix-pip
+LOCAL_PIP/
+test-chain/
