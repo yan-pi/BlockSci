@@ -1,6 +1,6 @@
 # Getting help
 
-Please check the list of [Frequently Asked Questions](https://github.com/citp/BlockSci/wiki) first, especially the list of [Common Issues](https://github.com/citp/BlockSci/wiki#toc-common-issues) if you are not using our AMI.
+Please check the list of [Frequently Asked Questions](https://github.com/citp/BlockSci/wiki) first, especially the list of [Common Issues](https://github.com/citp/BlockSci/wiki#toc-common-issues).
 
 If you've encountered a bug or have a question about using BlockSci not answered in the FAQ, the best way to get help is to open a GitHub issue. We are an academic team and aren't able to provide the standard of support that you might expect for a commercial project, but we'll do our best.
 
