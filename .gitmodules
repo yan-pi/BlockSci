@@ -1,3 +1,0 @@
-[submodule "test/testchain-generator"]
-	path = test/testchain-generator
-	url = https://github.com/citp/testchain-generator
