@@ -1,7 +1,14 @@
+import hashlib
+import json
 import os
 import subprocess
 
 import pytest
+
+_taproot_fixture_override = os.environ.get("BLOCKSCI_TAPROOT_FIXTURE_DIR")
+_taproot_fixture_params = (
+    (_taproot_fixture_override,) if _taproot_fixture_override else ("../files/btc-taproot", "../files/btc-taproot-xor")
+)
 
 
 def pytest_addoption(parser):
@@ -74,7 +81,45 @@ def chain(tmpdir_factory, chain_name):
 
 @pytest.fixture
 def json_data(chain_name):
-    import json
-
     with open(f"../files/{chain_name}/output.json") as f:
         return json.load(f)
+
+
+@pytest.fixture(scope="session", params=_taproot_fixture_params, ids=lambda path: os.path.basename(path))
+def taproot_chain(tmpdir_factory, request):
+    """Parse the dedicated P2TR fixture incrementally and return its manifest."""
+    self_dir = os.path.dirname(os.path.realpath(__file__))
+    fixture_dir = request.param if os.path.isabs(request.param) else os.path.join(self_dir, request.param)
+    temp_dir = tmpdir_factory.mktemp(os.path.basename(fixture_dir))
+    chain_dir = str(temp_dir)
+    config_path = chain_dir + "/config.json"
+    with open(fixture_dir + "/fixture-manifest.json") as stream:
+        manifest = json.load(stream)
+    for relative_path, expected_hash in manifest["files"].items():
+        digest = hashlib.sha256()
+        with open(fixture_dir + "/" + relative_path, "rb") as fixture_file:
+            for chunk in iter(lambda: fixture_file.read(1024 * 1024), b""):
+                digest.update(chunk)
+        assert digest.hexdigest() == expected_hash
+    create_config_cmd = [
+        "blocksci_parser",
+        config_path,
+        "generate-config",
+        "bitcoin_regtest",
+        chain_dir,
+        "--disk",
+        fixture_dir + "/regtest",
+        "--max-block",
+        "102",
+    ]
+    subprocess.run(create_config_cmd, check=True)
+    subprocess.run(["blocksci_parser", config_path, "update"], check=True)
+    subprocess.run(create_config_cmd[:-2], check=True)
+    subprocess.run(["blocksci_parser", config_path, "update"], check=True)
+    subprocess.run(["blocksci_check_integrity", config_path], check=True)
+
+    with open(config_path) as stream:
+        assert json.load(stream)["version"] == 6
+    import blocksci
+
+    return blocksci.Blockchain(config_path), manifest

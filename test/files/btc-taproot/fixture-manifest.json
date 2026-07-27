@@ -1,0 +1,36 @@
+{
+  "bitcoin_core_version": "/Satoshi:31.0.0/",
+  "blocksxor": false,
+  "files": {
+    "regtest/blocks/blk00000.dat": "0f174ee04d452208b102730809c15789adae540df8cacb8e9e3b087a0e18d9c8"
+  },
+  "funding_txid": "9ee85890d580d311fe46e5bd27984460ee7d1ac3cedf0083e603b665e40e6b61",
+  "generator_backend": "direct",
+  "key_path": {
+    "address": "bcrt1pgxxyvcmdncdxs06cudd5yvmwwahaesaj6n3eu7st7x4sw9hrchaqg4dc89",
+    "output": 1,
+    "output_key": "418c46636d9e1a683f58e35b42336e776fdcc3b2d4e39e7a0bf1ab0716e3c5fa",
+    "spending_txid": "4cdd0c32a1980d7366a303f704b830d8089e3a21112976874cb148b70b2a451b",
+    "witness_stack": [
+      "a9e2844be01e5089e0424808ed5be2556c36c389c9bc40decfd9c0979693822c9e3b09a1ba0f5b72705bdee06babb7213f1a178f1b887d351a9af6f768c9d91f"
+    ]
+  },
+  "script_path": {
+    "address": "bcrt1pg44et8f66qnjn5fd0hu6dnnx7tczqslmt3dkzpccjlzeg99psshqfkkdep",
+    "output": 2,
+    "output_key": "456b959d3ad02729d12d7df9a6ce66f2f02043fb5c5b61071897c59414a1842e",
+    "spending_txid": "57d0b60a093bd18ca8111e00133a99a58363f2bca891fafb672cb3e4589eed9d",
+    "witness_stack": [
+      "7fbb838b3accd232f417ec57983daff1670bb8409dfac136a6be80a54946ee8a8fcf3eb840d580a7a5af6107fa11d155aa599abf540cb47c24ca4ff3b561baf9",
+      "20c6047f9441ed7d6d3045406e95c07cd85c778e4b8cef3ca7abac09b95c709ee5ac",
+      "c179be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798"
+    ]
+  },
+  "tip_hash": "3d4297e19c13f9fd0482a626abf80b8283f32c392f2c53f8c481c0e42db777cc",
+  "tip_height": 103,
+  "unspent": {
+    "address": "bcrt1pjvtc2mkj9vmfneuj7w9dsqle70a040ms5tyfswhhz4vjyskznj5q9yg9s8",
+    "output": 3,
+    "output_key": "9317856ed22b3699e792f38ad803f9f3fafabf70a2c8983af715592242c29ca8"
+  }
+}
