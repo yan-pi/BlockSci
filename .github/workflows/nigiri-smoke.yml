@@ -1,0 +1,81 @@
+name: Nigiri Taproot smoke
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "23 4 * * 1"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nigiri-taproot-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  taproot-smoke:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        blocksxor: [disabled, enabled]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+        with:
+          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+            accept-flake-config = true
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.25.x"
+
+      - name: Build pinned Nigiri
+        run: |
+          git clone https://github.com/vulpemventures/nigiri.git "$RUNNER_TEMP/nigiri-src"
+          git -C "$RUNNER_TEMP/nigiri-src" checkout b91e00c8ff16c421f685d7a731f7a2c735d1c169
+          mkdir -p "$HOME/.local/bin"
+          go build -C "$RUNNER_TEMP/nigiri-src" -o "$HOME/.local/bin/nigiri" ./cmd/nigiri
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Generate live P2TR fixture
+        run: |
+          python3 test/fixtures/taproot/generate.py \
+            --backend nigiri \
+            --blocksxor "${{ matrix.blocksxor }}" \
+            --work-dir "$RUNNER_TEMP/nigiri-data-${{ matrix.blocksxor }}" \
+            --output "$RUNNER_TEMP/btc-taproot-live-${{ matrix.blocksxor }}"
+
+      - name: Parse and verify live fixture
+        env:
+          BLOCKSCI_TAPROOT_FIXTURE_DIR: ${{ runner.temp }}/btc-taproot-live-${{ matrix.blocksxor }}
+        run: |
+          nix develop -L --cores 1 --max-jobs 1 -c sh -c \
+            'cd test/blockscipy && python -m pytest --btc -q test_taproot_fixture.py'
+
+      - name: Upload Bitcoin Core log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nigiri-bitcoin-debug-log-${{ matrix.blocksxor }}
+          path: ${{ runner.temp }}/nigiri-data-${{ matrix.blocksxor }}/volumes/bitcoin/regtest/debug.log
+          if-no-files-found: ignore
+
+      - name: Clean Nigiri resources
+        if: always()
+        run: |
+          if [ -f "$RUNNER_TEMP/nigiri-data-${{ matrix.blocksxor }}/docker-compose.yml" ]; then
+            docker compose \
+              --file "$RUNNER_TEMP/nigiri-data-${{ matrix.blocksxor }}/docker-compose.yml" \
+              --project-name nigiri \
+              down --volumes || true
+          fi
+          rm -rf "$RUNNER_TEMP/nigiri-data-${{ matrix.blocksxor }}"

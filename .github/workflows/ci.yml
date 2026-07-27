@@ -70,6 +70,13 @@ jobs:
           cmake --build release --parallel 2
           cmake --install release
 
+      - name: Run Taproot C++ unit tests
+        run: |
+          cmake --build release --target blocksci_unittest --parallel 2
+          release/test/blocksci/blocksci_unittest \
+            '--gtest_filter=BlockXor.*:TaprootAddressType.*:WitnessProgramClassification.*:WitnessStackCodec.*' \
+            /tmp/blocksci-test-config.json
+
       - name: Build Python bindings
         run: |
           python3 -m venv "$PREFIX/venv"
@@ -128,7 +135,7 @@ jobs:
           openssl_prefix="$(brew --prefix openssl)"
           python3 -m venv "$PREFIX/venv"
           "$PREFIX/venv/bin/python" -m pip install --upgrade \
-            pip setuptools wheel scikit-build-core pybind11
+            pip setuptools wheel scikit-build-core pybind11 pytest pytest-regtest
           pybind11_dir="$("$PREFIX/venv/bin/python" -c 'import pybind11; print(pybind11.get_cmake_dir())')"
           test -f "$PREFIX/lib/cmake/blocksci/blocksci-config.cmake"
           test -f "$pybind11_dir/pybind11Config.cmake"
@@ -146,3 +153,5 @@ jobs:
           export DYLD_LIBRARY_PATH="$PREFIX/lib:${DYLD_LIBRARY_PATH:-}"
           blocksci_parser --help >/dev/null
           python -c 'import blocksci; print(blocksci.VERSION)'
+          cd test/blockscipy
+          python -m pytest --btc -q test_taproot_fixture.py
