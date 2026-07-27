@@ -125,7 +125,8 @@ namespace {
 
 std::vector<BlockInfo<FileTag>> readBlocksInfo(int fileNum, const ParserConfiguration<FileTag> &config) {
   auto blockFilePath = config.pathForBlockFile(fileNum);
-  SafeMemReader reader{blockFilePath.str()};
+  const auto xorKey = readBlockXorKey((config.diskConfig.coinDirectory / "blocks" / "xor.dat").str());
+  SafeMemReader reader{blockFilePath.str(), xorKey};
   return readBlocksImpl(reader, fileNum, config.diskConfig);
 }
 
@@ -143,6 +144,7 @@ template <> void ChainIndex<FileTag>::update(const ConfigType &config, blocksci:
   auto maxFileNum = maxBlockFileNum(fileNum, config);
 
   auto localConfig = config;
+  const auto xorKey = readBlockXorKey((config.diskConfig.coinDirectory / "blocks" / "xor.dat").str());
 
   std::mutex m;
 
@@ -164,7 +166,7 @@ template <> void ChainIndex<FileTag>::update(const ConfigType &config, blocksci:
             activeThreads++;
             // Determine block file path
             auto blockFilePath = localConfig.pathForBlockFile(fileNum);
-            SafeMemReader reader{blockFilePath.str()};
+            SafeMemReader reader{blockFilePath.str(), xorKey};
             // Logic for resume from last processed block, note blockStartOffset and length below
             if (fileNum == firstFile) {
               reader.reset(filePos);

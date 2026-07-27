@@ -82,6 +82,7 @@ WitnessStackItem::WitnessStackItem(SafeMemReader &reader) {
 
 void RawTransaction::load(SafeMemReader &reader, uint32_t txNum_, blocksci::BlockHeight blockHeight_,
                           bool witnessActivated) {
+  sourceBuffer = reader.activeDecodedRange();
   txNum = txNum_;
   isSegwit = witnessActivated;
   blockHeight = blockHeight_;

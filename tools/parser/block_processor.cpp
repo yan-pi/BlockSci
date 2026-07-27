@@ -114,6 +114,7 @@ template <> class BlockFileReader<FileTag> : public BlockFileReaderBase {
   std::unordered_map<int, uint32_t> lastTxRequired;
 
   const ParserConfiguration<FileTag> &config;
+  blocksci::block_xor::Key xorKey;
   SafeMemReader *reader = nullptr;
 
   blocksci::BlockHeight currentHeight = 0;
@@ -139,7 +140,7 @@ template <> class BlockFileReader<FileTag> : public BlockFileReaderBase {
 public:
   BlockFileReader(const ParserConfiguration<FileTag> &config_, std::vector<BlockInfo<FileTag>> &blocksToAdd,
                   uint32_t firstTxNum)
-      : config(config_) {
+      : config(config_), xorKey(readBlockXorKey((config_.diskConfig.coinDirectory / "blocks" / "xor.dat").str())) {
     for (auto &block : blocksToAdd) {
       firstTxNum += block.nTx;
       lastTxRequired[block.nFile] = firstTxNum;
@@ -156,9 +157,13 @@ public:
         throw std::runtime_error(ss.str());
       }
       files.insert(
-          std::make_pair(block.nFile, std::make_pair(SafeMemReader(blockPath.str()), lastTxRequired[block.nFile])));
+          std::make_pair(block.nFile,
+                         std::make_pair(SafeMemReader(blockPath.str(), xorKey), lastTxRequired[block.nFile])));
     }
     reader = &files.at(block.nFile).first;
+    if (reader->xorEnabled()) {
+      reader->activateDecodedRange(block.nDataPos, block.size);
+    }
     reader->reset(block.nDataPos);
     reader->advance(sizeof(CBlockHeader));
     reader->readVariableLengthInteger();

@@ -19,6 +19,7 @@
 #include <boost/container/small_vector.hpp>
 
 #include <cstdint>
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -34,6 +35,7 @@ namespace blocksci {
 std::vector<unsigned char> hexStringToVec(const std::string &scripthex);
 
 class SafeMemReader;
+using DecodedBlockBuffer = std::shared_ptr<const std::vector<char>>;
 
 struct WitnessStackItem {
   uint32_t length = 0;
@@ -148,6 +150,7 @@ struct RawTransaction {
   bool isSegwit;
   const char *txHashStart;
   uint32_t txHashLength;
+  DecodedBlockBuffer sourceBuffer;
 
   boost::container::small_vector<RawInput, 4> inputs;
   boost::container::small_vector<RawOutput, 4> outputs;

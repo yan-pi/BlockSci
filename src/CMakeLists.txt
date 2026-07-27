@@ -76,6 +76,7 @@ target_include_directories(blocksci PUBLIC
 
 set(CORE_HEADERS
   ${BLOCKSCI_HEADER_PREFIX}/core/address_types.hpp
+  ${BLOCKSCI_HEADER_PREFIX}/core/block_xor.hpp
   ${BLOCKSCI_HEADER_PREFIX}/core/address_type_meta.hpp
   ${BLOCKSCI_HEADER_PREFIX}/core/bitcoin_uint256.hpp
   ${BLOCKSCI_HEADER_PREFIX}/core/core_fwd.hpp
