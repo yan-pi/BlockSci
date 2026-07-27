@@ -197,17 +197,41 @@
         };
 
         devShells.default = pkgs.mkShell {
-          packages = with pkgs; [
+          inputsFrom = [
             self.packages.${system}.default
-            pythonDevEnv
+            self.packages.${system}.blockscipy
+          ];
+
+          packages = with pkgs; [
             clang-tools
             cmake
             ninja
+            pythonDevEnv
             ruff
+            self.packages.${system}.default
           ];
 
           BLOCKSCI_POOLS_JSON = "${knownPools}/pools.json";
-          CMAKE_PREFIX_PATH = "${self.packages.${system}.default}";
+          CMAKE_PREFIX_PATH = pkgs.lib.concatStringsSep ":" [
+            "${self.packages.${system}.default}"
+            "${pkgs.boost}"
+            "${pkgs.cereal}"
+            "${pkgs.clipp}"
+            "${pkgs.gtest}"
+            "${pkgs.nlohmann_json}"
+            "${pkgs.openssl}"
+            "${pkgs.secp256k1}"
+            "${pkgs.sparsehash}"
+            "${pkgs.range-v3}"
+            "${pkgs.howard-hinnant-date}"
+            "${self.packages.${system}.bitcoin-api-cpp}"
+            "${self.packages.${system}.dset}"
+            "${self.packages.${system}.endian}"
+            "${self.packages.${system}.filesystem}"
+            "${self.packages.${system}.mio}"
+            "${self.packages.${system}.rocksdb_8_9_1}"
+            "${self.packages.${system}.variant}"
+          ];
         };
 
         # Initial flake CI intentionally covers BTC regtest only. BCH/LTC
@@ -223,6 +247,20 @@
           chmod -R u+w "$TMPDIR/test"
           cd "$TMPDIR/test/blockscipy"
           python -m pytest --btc -q
+          touch "$out"
+        '';
+
+        checks.blockscipy-taproot = pkgs.runCommand "blocksci-python-taproot-tests" {
+          nativeBuildInputs = [
+            self.packages.${system}.default
+            pythonDevEnv
+          ];
+          BLOCKSCI_POOLS_JSON = "${knownPools}/pools.json";
+        } ''
+          cp -R ${self}/test "$TMPDIR/test"
+          chmod -R u+w "$TMPDIR/test"
+          cd "$TMPDIR/test/blockscipy"
+          python -m pytest --btc -q test_taproot_fixture.py
           touch "$out"
         '';
 
