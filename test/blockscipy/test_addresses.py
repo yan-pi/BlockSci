@@ -9,6 +9,8 @@ def test_address_type_str_repr():
     assert repr(blocksci.address_type.pubkeyhash) == "address_type.pubkeyhash"
     assert str(blocksci.address_type.scripthash) == "Pay to script hash"
     assert repr(blocksci.address_type.scripthash) == "address_type.scripthash"
+    assert str(blocksci.address_type.witness_taproot) == "Pay to witness taproot"
+    assert repr(blocksci.address_type.witness_taproot) == "address_type.witness_taproot"
 
 
 def address_types(chain_name):

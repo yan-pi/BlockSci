@@ -32,8 +32,9 @@ using BlocksciRangeTypeVariant = mpark::variant<
     RawRange<blocksci::script::PubkeyHash>, RawRange<blocksci::script::WitnessPubkeyHash>,
     RawRange<blocksci::script::MultisigPubkey>, RawRange<blocksci::script::Multisig>,
     RawRange<blocksci::script::ScriptHash>, RawRange<blocksci::script::WitnessScriptHash>,
-    RawRange<blocksci::script::OpReturn>, RawRange<blocksci::script::Nonstandard>,
-    RawRange<blocksci::script::WitnessUnknown>, RawRange<blocksci::AddressType::Enum>, RawRange<int64_t>,
+    RawRange<blocksci::script::WitnessTaproot>, RawRange<blocksci::script::OpReturn>,
+    RawRange<blocksci::script::Nonstandard>, RawRange<blocksci::script::WitnessUnknown>,
+    RawRange<blocksci::AddressType::Enum>, RawRange<int64_t>,
     RawRange<bool>, RawRange<std::chrono::system_clock::time_point>, RawRange<blocksci::uint256>,
     RawRange<blocksci::uint160>, RawRange<pybind11::bytes>, RawRange<pybind11::list>, RawRange<std::string>>;
 

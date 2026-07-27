@@ -23,6 +23,7 @@ void addProxyFlowFunctionsScripts(pybind11::module &m, pybind11::module &pm) {
   addProxyFlowFunctions<script::Multisig>(m, pm);
   addProxyFlowFunctions<script::ScriptHash>(m, pm);
   addProxyFlowFunctions<script::WitnessScriptHash>(m, pm);
+  addProxyFlowFunctions<script::WitnessTaproot>(m, pm);
   addProxyFlowFunctions<script::OpReturn>(m, pm);
   addProxyFlowFunctions<script::Nonstandard>(m, pm);
   addProxyFlowFunctions<script::WitnessUnknown>(m, pm);

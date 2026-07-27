@@ -29,6 +29,7 @@
 #include "scripts/nulldata/nulldata_py.hpp"
 #include "scripts/pubkey/pubkey_py.hpp"
 #include "scripts/scripthash/scripthash_py.hpp"
+#include "scripts/taproot/taproot_py.hpp"
 #include "scripts/witness_unknown/witness_unknown_py.hpp"
 #include "sequence.hpp"
 #include "sequence_py.hpp"
@@ -107,7 +108,9 @@ PYBIND11_MODULE(_blocksci, m) {
   py::class_<script::ScriptHash> scriptHashCl(m, "ScriptHashAddress", addressCl,
                                               "Extra data about pay to script hash address");
   py::class_<script::WitnessScriptHash> witnessScriptHashCl(m, "WitnessScriptHashAddress", addressCl,
-                                                            "Extra data about pay to script hash address");
+                                                             "Extra data about pay to script hash address");
+  py::class_<script::WitnessTaproot> witnessTaprootCl(m, "TaprootAddress", addressCl,
+                                                       "Extra data about pay to witness taproot address");
   py::class_<script::Multisig> multisigCl(m, "MultisigAddress", addressCl, "Extra data about multi-signature address");
   py::class_<script::Nonstandard> nonstandardCl(m, "NonStandardAddress", addressCl,
                                                 "Extra data about non-standard address");
@@ -144,6 +147,7 @@ PYBIND11_MODULE(_blocksci, m) {
   RangeClasses<script::ScriptHash> scripthashRangeCls(createAddressRangeClasses<script::ScriptHash>(m));
   RangeClasses<script::WitnessScriptHash> witnessScripthashRangeCls(
       createAddressRangeClasses<script::WitnessScriptHash>(m));
+  RangeClasses<script::WitnessTaproot> witnessTaprootRangeCls(createAddressRangeClasses<script::WitnessTaproot>(m));
   RangeClasses<script::OpReturn> nulldataRangeCls(createAddressRangeClasses<script::OpReturn>(m));
   RangeClasses<script::Nonstandard> nonstandardRangeCls(createAddressRangeClasses<script::Nonstandard>(m));
   RangeClasses<script::WitnessUnknown> witnessUnknownRangeCls(createAddressRangeClasses<script::WitnessUnknown>(m));
@@ -161,6 +165,7 @@ PYBIND11_MODULE(_blocksci, m) {
   addAnyInit<script::Multisig>(anyCl);
   addAnyInit<script::ScriptHash>(anyCl);
   addAnyInit<script::WitnessScriptHash>(anyCl);
+  addAnyInit<script::WitnessTaproot>(anyCl);
   addAnyInit<script::OpReturn>(anyCl);
   addAnyInit<script::Nonstandard>(anyCl);
   addAnyInit<script::WitnessUnknown>(anyCl);
@@ -190,6 +195,7 @@ PYBIND11_MODULE(_blocksci, m) {
   addSelfProxy(multisigPubkeyCl);
   addSelfProxy(scriptHashCl);
   addSelfProxy(witnessScriptHashCl);
+  addSelfProxy(witnessTaprootCl);
   addSelfProxy(multisigCl);
   addSelfProxy(nonstandardCl);
   addSelfProxy(opReturnCl);
@@ -256,6 +262,10 @@ PYBIND11_MODULE(_blocksci, m) {
     {
       init_witness_scripthash(witnessScriptHashCl);
       addWitnessScriptHashRangeMethods(witnessScripthashRangeCls);
+    }
+    {
+      init_taproot(witnessTaprootCl);
+      addTaprootRangeMethods(witnessTaprootRangeCls);
     }
     {
       init_nulldata(opReturnCl);

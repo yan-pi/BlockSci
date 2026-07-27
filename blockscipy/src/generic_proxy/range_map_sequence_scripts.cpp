@@ -24,6 +24,7 @@ void applyProxyMapSequenceFuncsScripts(pybind11::class_<IteratorProxy, GenericPr
       .def("_map_sequence", mapSequence<script::Multisig>)
       .def("_map_sequence", mapSequence<script::ScriptHash>)
       .def("_map_sequence", mapSequence<script::WitnessScriptHash>)
+      .def("_map_sequence", mapSequence<script::WitnessTaproot>)
       .def("_map_sequence", mapSequence<script::OpReturn>)
       .def("_map_sequence", mapSequence<script::Nonstandard>)
       .def("_map_sequence", mapSequence<script::WitnessUnknown>);

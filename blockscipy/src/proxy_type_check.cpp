@@ -30,10 +30,11 @@ namespace {
 
   bool isScriptType(const std::type_info &type) {
     return type == typeid(script::Pubkey) || type == typeid(script::PubkeyHash) ||
-           type == typeid(script::WitnessPubkeyHash) || type == typeid(script::MultisigPubkey) ||
-           type == typeid(script::Multisig) || type == typeid(script::ScriptHash) ||
-           type == typeid(script::WitnessScriptHash) || type == typeid(script::OpReturn) ||
-           type == typeid(script::Nonstandard) || type == typeid(script::WitnessUnknown);
+            type == typeid(script::WitnessPubkeyHash) || type == typeid(script::MultisigPubkey) ||
+            type == typeid(script::Multisig) || type == typeid(script::ScriptHash) ||
+            type == typeid(script::WitnessScriptHash) || type == typeid(script::OpReturn) ||
+            type == typeid(script::WitnessTaproot) || type == typeid(script::Nonstandard) ||
+            type == typeid(script::WitnessUnknown);
   }
 } // namespace
 

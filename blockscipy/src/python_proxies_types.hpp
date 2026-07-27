@@ -41,6 +41,7 @@ struct ScriptProxies {
   AllProxyClasses<blocksci::script::Multisig, ProxyAddress> multisig;
   AllProxyClasses<blocksci::script::ScriptHash, ProxyAddress> scripthash;
   AllProxyClasses<blocksci::script::WitnessScriptHash, ProxyAddress> witnessScripthash;
+  AllProxyClasses<blocksci::script::WitnessTaproot, ProxyAddress> witnessTaproot;
   AllProxyClasses<blocksci::script::OpReturn, ProxyAddress> nulldata;
   AllProxyClasses<blocksci::script::Nonstandard, ProxyAddress> nonstandard;
   AllProxyClasses<blocksci::script::WitnessUnknown, ProxyAddress> witnessUnknown;

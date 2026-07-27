@@ -25,6 +25,7 @@ void applyProxyMapOptionalFuncsScripts(pybind11::class_<IteratorProxy, GenericPr
       .def("_map_optional", mapOptional<script::Multisig>)
       .def("_map_optional", mapOptional<script::ScriptHash>)
       .def("_map_optional", mapOptional<script::WitnessScriptHash>)
+      .def("_map_optional", mapOptional<script::WitnessTaproot>)
       .def("_map_optional", mapOptional<script::OpReturn>)
       .def("_map_optional", mapOptional<script::Nonstandard>)
       .def("_map_optional", mapOptional<script::WitnessUnknown>);

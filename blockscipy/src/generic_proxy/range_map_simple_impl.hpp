@@ -51,6 +51,7 @@ template <ranges::category range_cat, typename Class> void addProxyMapFuncsMetho
       .def("_map", mapSimple<range_cat, script::Multisig>)
       .def("_map", mapSimple<range_cat, script::ScriptHash>)
       .def("_map", mapSimple<range_cat, script::WitnessScriptHash>)
+      .def("_map", mapSimple<range_cat, script::WitnessTaproot>)
       .def("_map", mapSimple<range_cat, script::OpReturn>)
       .def("_map", mapSimple<range_cat, script::Nonstandard>)
       .def("_map", mapSimple<range_cat, script::WitnessUnknown>);

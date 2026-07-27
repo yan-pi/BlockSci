@@ -42,6 +42,8 @@ Proxy<AnyScript> SimpleProxyCreator<AnyScript>::operator()() const {
               return std::any_cast<ScriptHash>(t);
             } else if (o == typeid(WitnessScriptHash)) {
               return std::any_cast<WitnessScriptHash>(t);
+            } else if (o == typeid(WitnessTaproot)) {
+              return std::any_cast<WitnessTaproot>(t);
             } else if (o == typeid(OpReturn)) {
               return std::any_cast<OpReturn>(t);
             } else if (o == typeid(Nonstandard)) {

@@ -23,6 +23,7 @@ void addProxyFunctionsScripts(pybind11::module &m, pybind11::module &pm) {
   addProxyFunctions<script::Multisig>(m, pm);
   addProxyFunctions<script::ScriptHash>(m, pm);
   addProxyFunctions<script::WitnessScriptHash>(m, pm);
+  addProxyFunctions<script::WitnessTaproot>(m, pm);
   addProxyFunctions<script::OpReturn>(m, pm);
   addProxyFunctions<script::Nonstandard>(m, pm);
   addProxyFunctions<script::WitnessUnknown>(m, pm);

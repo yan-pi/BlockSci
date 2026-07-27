@@ -32,8 +32,9 @@ using BlocksciTypeVariant =
                    blocksci::EquivAddress, blocksci::Cluster, blocksci::TaggedCluster, blocksci::TaggedAddress,
                    blocksci::script::Pubkey, blocksci::script::PubkeyHash, blocksci::script::WitnessPubkeyHash,
                    blocksci::script::MultisigPubkey, blocksci::script::Multisig, blocksci::script::ScriptHash,
-                   blocksci::script::WitnessScriptHash, blocksci::script::OpReturn, blocksci::script::Nonstandard,
-                   blocksci::script::WitnessUnknown, blocksci::AddressType::Enum, int64_t, bool,
+                    blocksci::script::WitnessScriptHash, blocksci::script::WitnessTaproot,
+                    blocksci::script::OpReturn, blocksci::script::Nonstandard, blocksci::script::WitnessUnknown,
+                    blocksci::AddressType::Enum, int64_t, bool,
                    std::chrono::system_clock::time_point, blocksci::uint256, blocksci::uint160, pybind11::bytes,
                    pybind11::list, std::string>;
 

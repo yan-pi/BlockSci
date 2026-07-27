@@ -44,14 +44,16 @@ void init_address_type(py::module &m) {
       .value("nulldata", AddressType::Enum::NULL_DATA)
       .value("witness_pubkeyhash", AddressType::Enum::WITNESS_PUBKEYHASH)
       .value("witness_scripthash", AddressType::Enum::WITNESS_SCRIPTHASH)
+      .value("witness_taproot", AddressType::Enum::WITNESS_TAPROOT)
       .value("witness_unknown", AddressType::Enum::WITNESS_UNKNOWN)
       .def_property_readonly_static(
           "types",
-          [](py::object) -> std::array<AddressType::Enum, 10> {
+          [](py::object) -> std::array<AddressType::Enum, 11> {
             return {{AddressType::Enum::NONSTANDARD, AddressType::Enum::PUBKEY, AddressType::Enum::PUBKEYHASH,
                      AddressType::Enum::MULTISIG_PUBKEY, AddressType::Enum::SCRIPTHASH, AddressType::Enum::MULTISIG,
                      AddressType::Enum::NULL_DATA, AddressType::Enum::WITNESS_PUBKEYHASH,
-                     AddressType::Enum::WITNESS_SCRIPTHASH, AddressType::Enum::WITNESS_UNKNOWN}};
+                     AddressType::Enum::WITNESS_SCRIPTHASH, AddressType::Enum::WITNESS_TAPROOT,
+                     AddressType::Enum::WITNESS_UNKNOWN}};
           },
           "A list of all possible address types")
       .def("__str__", [](AddressType::Enum val) {
@@ -74,6 +76,8 @@ void init_address_type(py::module &m) {
           return "Pay to witness pubkey hash";
         case AddressType::Enum::WITNESS_SCRIPTHASH:
           return "Pay to witness script hash";
+        case AddressType::Enum::WITNESS_TAPROOT:
+          return "Pay to witness taproot";
         case AddressType::Enum::WITNESS_UNKNOWN:
           return "Pay to witness unknown";
         default:

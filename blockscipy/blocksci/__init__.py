@@ -53,6 +53,7 @@ _ADDRESS_TYPE_LABELS = {
     address_type.nulldata: "Null data",
     address_type.witness_pubkeyhash: "Pay to witness pubkey hash",
     address_type.witness_scripthash: "Pay to witness script hash",
+    address_type.witness_taproot: "Pay to witness taproot",
     address_type.witness_unknown: "Pay to witness unknown",
 }
 
@@ -66,6 +67,7 @@ _ADDRESS_TYPE_REPR_NAMES = {
     address_type.nulldata: "nulldata",
     address_type.witness_pubkeyhash: "witness_pubkeyhash",
     address_type.witness_scripthash: "witness_scripthash",
+    address_type.witness_taproot: "witness_taproot",
     address_type.witness_unknown: "witness_unknown",
 }
 
@@ -717,6 +719,7 @@ setup_self_methods(WitnessPubkeyHashAddress)
 setup_self_methods(MultisigPubkey)
 setup_self_methods(ScriptHashAddress)
 setup_self_methods(WitnessScriptHashAddress)
+setup_self_methods(TaprootAddress)
 setup_self_methods(MultisigAddress)
 setup_self_methods(NonStandardAddress)
 setup_self_methods(OpReturn)
@@ -740,6 +743,7 @@ setup_iterator_and_proxy_methods(WitnessPubkeyHashAddressIterator)
 setup_iterator_and_proxy_methods(MultisigPubkeyIterator)
 setup_iterator_and_proxy_methods(ScriptHashAddressIterator)
 setup_iterator_and_proxy_methods(WitnessScriptHashAddressIterator)
+setup_iterator_and_proxy_methods(TaprootAddressIterator)
 setup_iterator_and_proxy_methods(MultisigAddressIterator)
 setup_iterator_and_proxy_methods(NonstandardAddressIterator)
 setup_iterator_and_proxy_methods(OpReturnIterator)
@@ -762,6 +766,7 @@ setup_range_and_proxy_methods(WitnessPubkeyHashAddressRange)
 setup_range_and_proxy_methods(MultisigPubkeyRange)
 setup_range_and_proxy_methods(ScriptHashAddressRange)
 setup_range_and_proxy_methods(WitnessScriptHashAddressRange)
+setup_range_and_proxy_methods(TaprootAddressRange)
 setup_range_and_proxy_methods(MultisigAddressRange)
 setup_range_and_proxy_methods(NonstandardAddressRange)
 setup_range_and_proxy_methods(OpReturnRange)

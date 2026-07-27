@@ -83,6 +83,7 @@ TypenameLookup::TypenameLookup() {
   addTypeName<script::OpReturn>(typeNames, docstringTypeNames, "OpReturn");
   addTypeName<script::ScriptHash>(typeNames, docstringTypeNames, "ScriptHashAddress");
   addTypeName<script::WitnessScriptHash>(typeNames, docstringTypeNames, "WitnessScriptHashAddress");
+  addTypeName<script::WitnessTaproot>(typeNames, docstringTypeNames, "TaprootAddress");
   addTypeName<script::WitnessUnknown>(typeNames, docstringTypeNames, "WitnessUnknownAddress");
 
   addTypeName<EquivAddress>(typeNames, docstringTypeNames, "EquivAddress");
