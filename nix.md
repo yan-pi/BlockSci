@@ -49,8 +49,9 @@ On machines with limited RAM, lower the CMake/Ninja parallelism:
 nix flake check -L --cores 1 --max-jobs 1
 ```
 
-The current flake check intentionally runs the BTC Python regression suite
-only. BCH/LTC checks can be added later as separate follow-ups.
+The current flake checks run the BTC Python regression suite and a focused
+Taproot fixture suite. Both consume committed regtest block files and do not
+require Docker. BCH/LTC checks can be added later as separate follow-ups.
 
 ## Development shell
 
@@ -93,6 +94,16 @@ nix develop -L --cores 4 --max-jobs 1 --command sh -c 'cd test/blockscipy && pyt
 ```
 
 The tests use synthetic Bitcoin regtest blocks from `test/files/btc/regtest/` and call `blocksci_parser` from the Nix package.
+
+Run the committed plaintext and XOR-obfuscated Taproot key-path and script-path
+integration tests:
+
+```bash
+nix develop -c sh -c 'cd test/blockscipy && python -m pytest --btc -q test_taproot_fixture.py'
+```
+
+Taproot changes the persisted script layout, so parsed datasets created with
+data version 5 must be deleted and reparsed with data version 6.
 
 ## Run benchmarks
 

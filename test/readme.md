@@ -24,6 +24,21 @@ You'll need to install `pytest` and the `pytest-regtest` plugin:
 
 We currently test BlockSci with committed synthetic regtest fixtures under `test/files/` for Bitcoin (BTC), Bitcoin Cash (BCH), and Litecoin (LTC).
 
+Taproot has plaintext and XOR-obfuscated fixtures under
+`test/files/btc-taproot/` and `test/files/btc-taproot-xor/`. They contain an
+unspent P2TR output plus confirmed key-path and script-path spends. Regenerate
+them with Nigiri using:
+
+```bash
+python test/fixtures/taproot/generate.py --backend nigiri
+python test/fixtures/taproot/generate.py \
+  --backend nigiri --blocksxor enabled --output test/files/btc-taproot-xor
+```
+
+The normal test suite consumes the committed block file and does not require
+Nigiri or Docker. See `test/fixtures/taproot/README.md` for the direct Bitcoin
+Core development backend and fixture-generation details.
+
 #### Running tests for a specific chain
 
 To only run tests for Bitcoin, run `pytest --btc`. To run tests for Bitcoin Cash, run `pytest --bch`. To run tests for Litecoin, run `pytest --ltc`.
