@@ -18,19 +18,19 @@
 #include <type_traits>
 
 #define DEDUP_ADDRESS_TYPE_LIST                                                                                        \
-  VAL(SCRIPTHASH), VAL(PUBKEY), VAL(MULTISIG), VAL(NULL_DATA), VAL(WITNESS_UNKNOWN), VAL(NONSTANDARD)
+  VAL(SCRIPTHASH), VAL(PUBKEY), VAL(MULTISIG), VAL(NULL_DATA), VAL(TAPROOT), VAL(WITNESS_UNKNOWN), VAL(NONSTANDARD)
 
 namespace blocksci {
 
   struct DedupAddressType {
 
     enum Enum {
-    // after preprocessing: SCRIPTHASH, PUBKEY, MULTISIG, NULL_DATA, WITNESS_UNKNOWN, NONSTANDARD
+    // after preprocessing: SCRIPTHASH, PUBKEY, MULTISIG, NULL_DATA, TAPROOT, WITNESS_UNKNOWN, NONSTANDARD
 #define VAL(x) x
       DEDUP_ADDRESS_TYPE_LIST
 #undef VAL
     };
-    static constexpr size_t size = 6;
+    static constexpr size_t size = 7;
 
 // after preprocessing: using all = std::tuple<std::integral_constant<Enum, SCRIPTHASH>, std::integral_constant<Enum,
 // PUBKEY>, std::integral_constant<Enum, MULTISIG>, std::integral_constant<Enum, NULL_DATA>,

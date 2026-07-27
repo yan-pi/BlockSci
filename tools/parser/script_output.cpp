@@ -17,6 +17,7 @@
 
 #include <blocksci/core/address_type_meta.hpp>
 #include <blocksci/core/address_types.hpp>
+#include <blocksci/core/witness_program.hpp>
 #include <blocksci/core/meta.hpp>
 #include <blocksci/core/raw_address.hpp>
 #include <blocksci/core/script_data.hpp>
@@ -121,20 +122,20 @@ ScriptOutputDataType extractScriptData(const blocksci::CScriptView &scriptPubKey
   uint8_t witnessversion;
   ranges::subrange<const unsigned char *> witnessprogram;
   if (witnessActivated && scriptPubKey.IsWitnessProgram(witnessversion, witnessprogram)) {
-    if (witnessversion == 0) {
-      if (witnessprogram.size() == 20) {
+    const auto witnessType = blocksci::classifyWitnessProgram(witnessversion, witnessprogram.size());
+    if (witnessType == AddressType::WITNESS_PUBKEYHASH) {
         return ScriptOutputData<AddressType::Enum::WITNESS_PUBKEYHASH>(
             uint160{witnessprogram.begin(), witnessprogram.end()});
-      } else if (witnessprogram.size() == 32) {
+    } else if (witnessType == AddressType::WITNESS_SCRIPTHASH) {
         return ScriptOutputData<AddressType::Enum::WITNESS_SCRIPTHASH>(
             uint256{witnessprogram.begin(), witnessprogram.end()});
-      } else {
-        // Witness v0 with other script length is treated as nonstandard
-        return ScriptOutputData<AddressType::Enum::NONSTANDARD>{scriptPubKey};
-      }
-    } else {
+    } else if (witnessType == AddressType::WITNESS_TAPROOT) {
+      return ScriptOutputData<AddressType::Enum::WITNESS_TAPROOT>(uint256{witnessprogram.begin(), witnessprogram.end()});
+    } else if (witnessType == AddressType::WITNESS_UNKNOWN) {
       return ScriptOutputData<AddressType::Enum::WITNESS_UNKNOWN>(witnessversion, witnessprogram);
     }
+    // Witness v0 with other script lengths is nonstandard under BIP141.
+    return ScriptOutputData<AddressType::Enum::NONSTANDARD>{scriptPubKey};
   }
 
   // Provably prunable, data-carrying output
@@ -285,6 +286,19 @@ ScriptOutputData<blocksci::AddressType::Enum::WITNESS_SCRIPTHASH>::getData(uint3
   blocksci::ScriptHashData data{txNum, hash, blocksci::RawAddress{0, blocksci::AddressType::Enum::NONSTANDARD}};
   data.saw(blocksci::AddressType::Enum::WITNESS_SCRIPTHASH, topLevel);
   return data;
+}
+
+// MARK: WITNESS_TAPROOT
+
+blocksci::uint256 ScriptOutputData<blocksci::AddressType::Enum::WITNESS_TAPROOT>::getHash() const {
+  return outputKey;
+}
+
+blocksci::ArbitraryLengthData<blocksci::TaprootScriptData>
+ScriptOutputData<blocksci::AddressType::Enum::WITNESS_TAPROOT>::getData(uint32_t txNum, bool topLevel) const {
+  blocksci::TaprootScriptData data{txNum, outputKey};
+  data.saw(blocksci::AddressType::Enum::WITNESS_TAPROOT, topLevel);
+  return blocksci::ArbitraryLengthData<blocksci::TaprootScriptData>(data);
 }
 
 // MARK: TX_MULTISIG

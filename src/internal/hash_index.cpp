@@ -190,6 +190,9 @@ namespace blocksci {
   template ranges::any_view<
       std::pair<uint32_t, typename blocksci::AddressInfo<AddressType::WITNESS_SCRIPTHASH>::IDType>>
   HashIndex::getAddressRange<AddressType::WITNESS_SCRIPTHASH>();
+  template ranges::any_view<
+      std::pair<uint32_t, typename blocksci::AddressInfo<AddressType::WITNESS_TAPROOT>::IDType>>
+  HashIndex::getAddressRange<AddressType::WITNESS_TAPROOT>();
   template ranges::any_view<std::pair<uint32_t, typename blocksci::AddressInfo<AddressType::MULTISIG>::IDType>>
   HashIndex::getAddressRange<AddressType::MULTISIG>();
 } // namespace blocksci

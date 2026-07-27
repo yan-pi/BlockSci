@@ -68,6 +68,15 @@ namespace blocksci {
     static constexpr AddressType::Enum reprType = AddressType::NULL_DATA;
   };
 
+  template <> struct DedupAddressInfo<DedupAddressType::TAPROOT> {
+    static constexpr char name[] = "taproot_script";
+    static constexpr bool equived = true;
+    static constexpr bool spendable = true;
+    static constexpr bool indexed = true;
+    static constexpr std::array<AddressType::Enum, 1> equivTypes = {{AddressType::WITNESS_TAPROOT}};
+    static constexpr AddressType::Enum reprType = AddressType::WITNESS_TAPROOT;
+  };
+
   template <> struct DedupAddressInfo<DedupAddressType::WITNESS_UNKNOWN> {
     static constexpr char name[] = "witness_unknown";
     static constexpr bool equived = false;

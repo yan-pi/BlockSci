@@ -109,6 +109,14 @@ template <> struct ScriptInputData<blocksci::AddressType::Enum::WITNESS_UNKNOWN>
                   const SpendData<blocksci::AddressType::Enum::WITNESS_UNKNOWN> &);
 };
 
+template <> struct ScriptInputData<blocksci::AddressType::Enum::WITNESS_TAPROOT> : public ScriptInputDataBase {
+  blocksci::CScript script;
+
+  ScriptInputData() = default;
+  ScriptInputData(const InputView &inputView, const blocksci::CScriptView &scriptView, const RawTransaction &tx,
+                  const SpendData<blocksci::AddressType::Enum::WITNESS_TAPROOT> &);
+};
+
 class AnyScriptInput;
 
 template <> struct ScriptInputData<blocksci::AddressType::Enum::SCRIPTHASH> : public ScriptInputDataBase {

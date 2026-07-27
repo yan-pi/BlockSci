@@ -56,6 +56,8 @@ class AddressWriter {
                          ScriptFile<blocksci::DedupAddressType::NONSTANDARD> &file);
   void serializeInputImp(const ScriptInput<blocksci::AddressType::WITNESS_UNKNOWN> &input,
                          ScriptFile<blocksci::DedupAddressType::WITNESS_UNKNOWN> &file);
+  void serializeInputImp(const ScriptInput<blocksci::AddressType::WITNESS_TAPROOT> &input,
+                         ScriptFile<blocksci::DedupAddressType::TAPROOT> &file);
 
   template <blocksci::AddressType::Enum type>
   void serializeOutputImp(const ScriptOutput<type> &output, ScriptFile<dedupType(type)> &file, bool topLevel) {
@@ -73,6 +75,8 @@ class AddressWriter {
                           ScriptFile<blocksci::DedupAddressType::NONSTANDARD> &file, bool topLevel);
   void serializeOutputImp(const ScriptOutput<blocksci::AddressType::WITNESS_UNKNOWN> &output,
                           ScriptFile<blocksci::DedupAddressType::WITNESS_UNKNOWN> &file, bool topLevel);
+  void serializeOutputImp(const ScriptOutput<blocksci::AddressType::WITNESS_TAPROOT> &output,
+                          ScriptFile<blocksci::DedupAddressType::TAPROOT> &file, bool topLevel);
 
   template <blocksci::AddressType::Enum type>
   void serializeWrappedScript(const ScriptInputData<type> &, uint32_t, uint32_t) {

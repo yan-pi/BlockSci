@@ -89,6 +89,12 @@ void AddressWriter::serializeOutputImp(const ScriptOutput<AddressType::WITNESS_U
   std::get<0>(data)->saw(AddressType::WITNESS_UNKNOWN, topLevel);
 }
 
+void AddressWriter::serializeOutputImp(const ScriptOutput<AddressType::WITNESS_TAPROOT> &output,
+                                       ScriptFile<blocksci::DedupAddressType::TAPROOT> &file, bool topLevel) {
+  auto data = file[output.scriptNum - 1];
+  std::get<0>(data)->saw(AddressType::WITNESS_TAPROOT, topLevel);
+}
+
 void AddressWriter::serializeInputImp(const ScriptInput<AddressType::PUBKEYHASH> &input,
                                       ScriptFile<DedupAddressType::PUBKEY> &file) {
   auto data = file[input.scriptNum - 1];
@@ -153,6 +159,14 @@ void AddressWriter::serializeInputImp(const ScriptInput<AddressType::WITNESS_UNK
                                       ScriptFile<DedupAddressType::WITNESS_UNKNOWN> &file) {
   blocksci::WitnessUnknownSpendScriptData scriptData(static_cast<uint32_t>(input.data.script.size()));
   blocksci::ArbitraryLengthData<blocksci::WitnessUnknownSpendScriptData> data(scriptData);
+  data.add(input.data.script.begin(), input.data.script.end());
+  file.write<1>(input.scriptNum - 1, data);
+}
+
+void AddressWriter::serializeInputImp(const ScriptInput<AddressType::WITNESS_TAPROOT> &input,
+                                      ScriptFile<DedupAddressType::TAPROOT> &file) {
+  blocksci::TaprootSpendScriptData scriptData(static_cast<uint32_t>(input.data.script.size()));
+  blocksci::ArbitraryLengthData<blocksci::TaprootSpendScriptData> data(scriptData);
   data.add(input.data.script.begin(), input.data.script.end());
   file.write<1>(input.scriptNum - 1, data);
 }

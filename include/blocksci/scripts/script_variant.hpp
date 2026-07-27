@@ -14,6 +14,7 @@
 #include "nulldata_script.hpp"
 #include "pubkey_script.hpp"
 #include "scripthash_script.hpp"
+#include "taproot_script.hpp"
 #include "witness_unknown_script.hpp"
 
 #include <blocksci/blocksci_export.h>

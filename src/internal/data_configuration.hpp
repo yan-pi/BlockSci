@@ -20,7 +20,7 @@
 
 namespace blocksci {
 
-  static constexpr int dataVersion = 5;
+  static constexpr int dataVersion = 6;
 
   nlohmann::json loadConfig(const std::string &configFilePath);
   void checkVersion(const nlohmann::json &jsonConf);

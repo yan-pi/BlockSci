@@ -20,6 +20,7 @@ namespace blocksci {
   constexpr char DedupAddressInfo<DedupAddressType::SCRIPTHASH>::name[];
   constexpr char DedupAddressInfo<DedupAddressType::MULTISIG>::name[];
   constexpr char DedupAddressInfo<DedupAddressType::NULL_DATA>::name[];
+  constexpr char DedupAddressInfo<DedupAddressType::TAPROOT>::name[];
   constexpr char DedupAddressInfo<DedupAddressType::NONSTANDARD>::name[];
   constexpr char DedupAddressInfo<DedupAddressType::WITNESS_UNKNOWN>::name[];
 
@@ -27,6 +28,7 @@ namespace blocksci {
   constexpr std::array<AddressType::Enum, 2> DedupAddressInfo<DedupAddressType::SCRIPTHASH>::equivTypes;
   constexpr std::array<AddressType::Enum, 1> DedupAddressInfo<DedupAddressType::MULTISIG>::equivTypes;
   constexpr std::array<AddressType::Enum, 1> DedupAddressInfo<DedupAddressType::NULL_DATA>::equivTypes;
+  constexpr std::array<AddressType::Enum, 1> DedupAddressInfo<DedupAddressType::TAPROOT>::equivTypes;
   constexpr std::array<AddressType::Enum, 1> DedupAddressInfo<DedupAddressType::NONSTANDARD>::equivTypes;
   constexpr std::array<AddressType::Enum, 1> DedupAddressInfo<DedupAddressType::WITNESS_UNKNOWN>::equivTypes;
 

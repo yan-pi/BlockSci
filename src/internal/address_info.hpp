@@ -67,6 +67,13 @@ namespace blocksci {
     using IDType = uint256;
   };
 
+  template <> struct AddressInfo<AddressType::WITNESS_TAPROOT> {
+    static constexpr char name[] = "witness_taproot";
+    static constexpr DedupAddressType::Enum dedupType = DedupAddressType::TAPROOT;
+    static constexpr AddressType::Enum exampleType = AddressType::WITNESS_TAPROOT;
+    using IDType = uint256;
+  };
+
   template <> struct AddressInfo<AddressType::MULTISIG> {
     static constexpr char name[] = "multisig";
     static constexpr DedupAddressType::Enum dedupType = DedupAddressType::MULTISIG;

@@ -280,6 +280,12 @@ namespace blocksci {
             return Address{*addressNum, AddressType::WITNESS_SCRIPTHASH, access};
           }
         }
+      } else if (decoded.first == 1 && decoded.second.size() == 32) {
+        uint256 outputKey(decoded.second.begin(), decoded.second.end());
+        ranges::optional<uint32_t> addressNum = access.getHashIndex().lookupAddress<AddressType::WITNESS_TAPROOT>(outputKey);
+        if (addressNum) {
+          return Address{*addressNum, AddressType::WITNESS_TAPROOT, access};
+        }
       }
       return ranges::nullopt;
     }
@@ -351,6 +357,9 @@ namespace blocksci {
       break;
     }
     case DedupAddressType::NULL_DATA: {
+      break;
+    }
+    case DedupAddressType::TAPROOT: {
       break;
     }
     default: {

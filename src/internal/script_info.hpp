@@ -45,6 +45,11 @@ namespace blocksci {
     using storage = Indexed<RawData>;
   };
 
+  template <> struct BLOCKSCI_EXPORT ScriptInfo<DedupAddressType::TAPROOT> {
+    using outputType = TaprootScriptData;
+    using storage = Indexed<TaprootScriptData, TaprootSpendScriptData>;
+  };
+
   template <> struct BLOCKSCI_EXPORT ScriptInfo<DedupAddressType::WITNESS_UNKNOWN> {
     using outputType = WitnessUnknownScriptData;
     using storage = Indexed<WitnessUnknownScriptData, WitnessUnknownSpendScriptData>;

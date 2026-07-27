@@ -40,6 +40,7 @@ namespace blocksci {
     using WitnessPubkeyHash = ScriptAddress<AddressType::WITNESS_PUBKEYHASH>;
     using ScriptHash = ScriptAddress<AddressType::SCRIPTHASH>;
     using WitnessScriptHash = ScriptAddress<AddressType::WITNESS_SCRIPTHASH>;
+    using WitnessTaproot = ScriptAddress<AddressType::WITNESS_TAPROOT>;
     using Multisig = ScriptAddress<AddressType::MULTISIG>;
     using OpReturn = ScriptAddress<AddressType::NULL_DATA>;
     using Nonstandard = ScriptAddress<AddressType::NONSTANDARD>;

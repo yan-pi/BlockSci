@@ -138,6 +138,19 @@ template <> struct ScriptOutputData<blocksci::AddressType::Enum::WITNESS_SCRIPTH
   blocksci::ScriptHashData getData(uint32_t txNum, bool topLevel) const;
 };
 
+template <> struct ScriptOutputData<blocksci::AddressType::Enum::WITNESS_TAPROOT> : public ScriptOutputDataBase {
+  static constexpr bool maybeUpdate = true;
+
+  blocksci::uint256 outputKey;
+
+  ScriptOutputData(blocksci::uint256 outputKey_) : outputKey(outputKey_) {
+  }
+
+  blocksci::uint256 getHash() const;
+
+  blocksci::ArbitraryLengthData<blocksci::TaprootScriptData> getData(uint32_t txNum, bool topLevel) const;
+};
+
 template <> struct ScriptOutputData<blocksci::AddressType::Enum::MULTISIG> : public ScriptOutputDataBase {
   static constexpr int MAX_ADDRESSES = 16;
   uint8_t numRequired;

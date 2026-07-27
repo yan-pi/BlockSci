@@ -18,6 +18,7 @@
 
 #include <blocksci/core/address_types.hpp>
 #include <blocksci/core/raw_address.hpp>
+#include <blocksci/core/witness_stack.hpp>
 #include <blocksci/scripts/bitcoin_pubkey.hpp>
 
 #include <range/v3/view/subrange.hpp>
@@ -35,6 +36,18 @@
 #include <vector>
 
 #include <secp256k1.h>
+
+namespace {
+  blocksci::witness_stack::Bytes encodeWitnessStack(const InputView &inputView) {
+    blocksci::witness_stack::Stack stack;
+    stack.reserve(inputView.witnessStack.size());
+    for (const auto &stackItem : inputView.witnessStack) {
+      const auto *itemBegin = reinterpret_cast<const unsigned char *>(stackItem.itemBegin);
+      stack.emplace_back(itemBegin, itemBegin + stackItem.length);
+    }
+    return blocksci::witness_stack::encode(stack);
+  }
+} // namespace
 
 struct ScriptInputGenerator {
   const InputView &inputView;
@@ -214,4 +227,11 @@ ScriptInputData<blocksci::AddressType::Enum::WITNESS_UNKNOWN>::ScriptInputData(
     script << std::vector<unsigned char>{itemBegin, itemBegin + stackItem.length};
     script << 0xfe;
   }
+}
+
+ScriptInputData<blocksci::AddressType::Enum::WITNESS_TAPROOT>::ScriptInputData(
+    const InputView &inputView, const blocksci::CScriptView &, const RawTransaction &,
+    const SpendData<blocksci::AddressType::Enum::WITNESS_TAPROOT> &) {
+  const auto encoded = encodeWitnessStack(inputView);
+  script.assign(encoded.begin(), encoded.end());
 }

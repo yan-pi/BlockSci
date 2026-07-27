@@ -99,6 +99,9 @@ void HashIndexCreator::processTx(const blocksci::RawTransaction *tx, uint32_t tx
     if (txout.getType() == blocksci::AddressType::WITNESS_SCRIPTHASH) {
       auto script = scripts.getScriptData<blocksci::DedupAddressType::SCRIPTHASH>(txout.getAddressNum());
       addAddress<blocksci::AddressType::WITNESS_SCRIPTHASH>(script->hash256, txout.getAddressNum());
+    } else if (txout.getType() == blocksci::AddressType::WITNESS_TAPROOT) {
+      auto script = scripts.getScriptData<blocksci::DedupAddressType::TAPROOT>(txout.getAddressNum());
+      addAddress<blocksci::AddressType::WITNESS_TAPROOT>(std::get<0>(script)->outputKey, txout.getAddressNum());
     }
   }
 }

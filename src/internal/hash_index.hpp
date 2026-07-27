@@ -113,6 +113,8 @@ namespace blocksci {
         return getColumn(AddressType::MULTISIG);
       case DedupAddressType::NULL_DATA:
         return getColumn(AddressType::NULL_DATA);
+      case DedupAddressType::TAPROOT:
+        return getColumn(AddressType::WITNESS_TAPROOT);
       case DedupAddressType::NONSTANDARD:
         return getColumn(AddressType::NONSTANDARD);
       case DedupAddressType::WITNESS_UNKNOWN:
@@ -201,6 +203,9 @@ namespace blocksci {
   extern template ranges::any_view<
       std::pair<uint32_t, typename blocksci::AddressInfo<AddressType::WITNESS_SCRIPTHASH>::IDType>>
   HashIndex::getAddressRange<AddressType::WITNESS_SCRIPTHASH>();
+  extern template ranges::any_view<
+      std::pair<uint32_t, typename blocksci::AddressInfo<AddressType::WITNESS_TAPROOT>::IDType>>
+  HashIndex::getAddressRange<AddressType::WITNESS_TAPROOT>();
   extern template ranges::any_view<std::pair<uint32_t, typename blocksci::AddressInfo<AddressType::MULTISIG>::IDType>>
   HashIndex::getAddressRange<AddressType::MULTISIG>();
 } // namespace blocksci

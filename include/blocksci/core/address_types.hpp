@@ -18,7 +18,7 @@
 
 #define ADDRESS_TYPE_LIST                                                                                              \
   VAL(NONSTANDARD), VAL(PUBKEY), VAL(PUBKEYHASH), VAL(MULTISIG_PUBKEY), VAL(SCRIPTHASH), VAL(MULTISIG),                \
-      VAL(NULL_DATA), VAL(WITNESS_PUBKEYHASH), VAL(WITNESS_SCRIPTHASH), VAL(WITNESS_UNKNOWN)
+      VAL(NULL_DATA), VAL(WITNESS_PUBKEYHASH), VAL(WITNESS_SCRIPTHASH), VAL(WITNESS_TAPROOT), VAL(WITNESS_UNKNOWN)
 
 namespace blocksci {
   struct BLOCKSCI_EXPORT AddressType {
@@ -31,7 +31,7 @@ namespace blocksci {
       ADDRESS_TYPE_LIST
 #undef VAL
     };
-    static constexpr size_t size = 10;
+    static constexpr size_t size = 11;
 
 /* After preprocessing:
  * using all = std::tuple<std::integral_constant<Enum, NONSTANDARD>, std::integral_constant<Enum, PUBKEY>,

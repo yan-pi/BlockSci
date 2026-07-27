@@ -15,10 +15,13 @@
 #include "serializable_map.hpp"
 
 #include <internal/bitcoin_uint256_hex.hpp>
+#include <internal/address_info.hpp>
 #include <internal/dedup_address_info.hpp>
 
+#include <algorithm>
 #include <cstdint>
 #include <memory>
+#include <string>
 #include <tuple>
 #include <type_traits>
 #include <utility>
@@ -27,7 +30,7 @@
 enum class AddressLocation { MultiUseMap, LevelDb, NotFound };
 
 template <blocksci::AddressType::Enum type> struct RawAddressInfo {
-  blocksci::uint160 hash;
+  typename blocksci::AddressInfo<blocksci::DedupAddressInfo<dedupType(type)>::reprType>::IDType hash;
   AddressLocation location;
   uint32_t addressNum;
 };
@@ -40,18 +43,52 @@ template <blocksci::DedupAddressType::Enum> inline constexpr int startingCount =
 template <> inline constexpr int startingCount<blocksci::DedupAddressType::PUBKEY> = 600'000'000;
 template <> inline constexpr int startingCount<blocksci::DedupAddressType::SCRIPTHASH> = 100'000'000;
 template <> inline constexpr int startingCount<blocksci::DedupAddressType::MULTISIG> = 100'000'000;
+template <> inline constexpr int startingCount<blocksci::DedupAddressType::TAPROOT> = 100'000'000;
 
 class AddressState {
   static constexpr auto AddressFalsePositiveRate = .05;
 
+  template <typename Key> static Key sentinelKey(unsigned char fillValue) {
+    Key key;
+    std::fill(key.begin(), key.end(), fillValue);
+    return key;
+  }
+
+  template <typename T, blocksci::DedupAddressType::Enum scriptType> class AddressMapImpl;
+
   template <blocksci::DedupAddressType::Enum scriptType>
-  class AddressMap : public SerializableMap<blocksci::uint160, uint32_t> {
+  class AddressMapImpl<std::true_type, scriptType>
+      : public SerializableMap<
+            typename blocksci::AddressInfo<blocksci::DedupAddressInfo<scriptType>::reprType>::IDType, uint32_t> {
   public:
     static constexpr auto type = scriptType;
-    AddressMap()
-        : SerializableMap(blocksci::uint160S("FFFFFFFFFFFFFFFFFFFF"), blocksci::uint160S("AAAAAAAAAAAAAAAAAA")) {
+    using KeyType = typename blocksci::AddressInfo<blocksci::DedupAddressInfo<scriptType>::reprType>::IDType;
+    AddressMapImpl()
+        : SerializableMap<KeyType, uint32_t>(AddressState::sentinelKey<KeyType>(0xff),
+                                             AddressState::sentinelKey<KeyType>(0xaa)) {
     }
   };
+
+  template <blocksci::DedupAddressType::Enum scriptType> class AddressMapImpl<std::false_type, scriptType> {
+  public:
+    static constexpr auto type = scriptType;
+
+    bool unserialize(const std::string &) {
+      return false;
+    }
+
+    bool serialize(const std::string &) {
+      return true;
+    }
+  };
+
+  template <blocksci::DedupAddressType::Enum scriptType>
+  class AddressMap
+      : public AddressMapImpl<
+            std::integral_constant<bool, !std::is_same<typename blocksci::AddressInfo<
+                                                       blocksci::DedupAddressInfo<scriptType>::reprType>::IDType,
+                                                       void>::value>,
+            scriptType> {};
 
   template <blocksci::DedupAddressType::Enum scriptType> class AddressBloomFilter : public BloomFilter {
   public:
@@ -97,6 +134,7 @@ class AddressState {
     reloadBloomFilter<blocksci::AddressType::PUBKEYHASH>(1);
     reloadBloomFilter<blocksci::AddressType::SCRIPTHASH>(1);
     reloadBloomFilter<blocksci::AddressType::MULTISIG>(1);
+    reloadBloomFilter<blocksci::AddressType::WITNESS_TAPROOT>(1);
   }
 
 public:

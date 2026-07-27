@@ -23,6 +23,7 @@ namespace blocksci {
   constexpr char AddressInfo<AddressType::WITNESS_PUBKEYHASH>::name[];
   constexpr char AddressInfo<AddressType::SCRIPTHASH>::name[];
   constexpr char AddressInfo<AddressType::WITNESS_SCRIPTHASH>::name[];
+  constexpr char AddressInfo<AddressType::WITNESS_TAPROOT>::name[];
   constexpr char AddressInfo<AddressType::MULTISIG>::name[];
   constexpr char AddressInfo<AddressType::NULL_DATA>::name[];
   constexpr char AddressInfo<AddressType::NONSTANDARD>::name[];

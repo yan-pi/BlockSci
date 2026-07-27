@@ -65,15 +65,20 @@ namespace segwit_addr {
 
   /** Decode a SegWit address. */
   std::pair<int, segwit_data> decode(const std::string &hrp, const std::string &addr) {
-    std::pair<std::string, segwit_data> dec = bech32::decode(addr);
-    if (dec.first != hrp || dec.second.size() < 1)
+    auto decoded = bech32::decodeWithEncoding(addr);
+    auto encoding = std::get<0>(decoded);
+    auto decodedHrp = std::get<1>(decoded);
+    auto data = std::get<2>(decoded);
+    if (decodedHrp != hrp || data.size() < 1)
       return std::make_pair(-1, segwit_data());
     segwit_data conv;
-    if (!convertbits<5, 8, false>(conv, segwit_data(dec.second.begin() + 1, dec.second.end())) || conv.size() < 2 ||
-        conv.size() > 40 || dec.second[0] > 16 || (dec.second[0] == 0 && conv.size() != 20 && conv.size() != 32)) {
+    if (!convertbits<5, 8, false>(conv, segwit_data(data.begin() + 1, data.end())) || conv.size() < 2 ||
+        conv.size() > 40 || data[0] > 16 || (data[0] == 0 && conv.size() != 20 && conv.size() != 32) ||
+        (data[0] == 0 && encoding != bech32::Encoding::BECH32) ||
+        (data[0] != 0 && encoding != bech32::Encoding::BECH32M)) {
       return std::make_pair(-1, segwit_data());
     }
-    return std::make_pair(dec.second[0], conv);
+    return std::make_pair(data[0], conv);
   }
 
   /** Encode a SegWit address. */
@@ -81,7 +86,8 @@ namespace segwit_addr {
     segwit_data enc;
     enc.push_back(static_cast<unsigned char>(witver));
     convertbits<8, 5, true>(enc, witprog);
-    std::string ret = bech32::encode(hrp, enc);
+    auto encoding = witver == 0 ? bech32::Encoding::BECH32 : bech32::Encoding::BECH32M;
+    std::string ret = bech32::encode(hrp, enc, encoding);
     if (decode(hrp, ret).first == -1)
       return "";
     return ret;
@@ -91,7 +97,8 @@ namespace segwit_addr {
     segwit_data enc;
     enc.push_back(static_cast<unsigned char>(witver));
     convertbits<8, 5, true>(enc, witprog);
-    std::string ret = bech32::encode(config.segwitPrefix, enc);
+    auto encoding = witver == 0 ? bech32::Encoding::BECH32 : bech32::Encoding::BECH32M;
+    std::string ret = bech32::encode(config.segwitPrefix, enc, encoding);
     if (decode(config.segwitPrefix, ret).first == -1)
       return "";
     return ret;

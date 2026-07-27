@@ -240,6 +240,32 @@ namespace blocksci {
     }
   };
 
+  struct BLOCKSCI_EXPORT TaprootScriptData : public ScriptDataBase {
+    uint256 outputKey;
+
+    TaprootScriptData(uint32_t txNum, uint256 outputKey_) : ScriptDataBase(txNum), outputKey(outputKey_) {
+    }
+
+    size_t size() {
+      return sizeof(TaprootScriptData);
+    }
+
+    size_t realSize() const {
+      return sizeof(TaprootScriptData);
+    }
+  };
+
+  struct BLOCKSCI_EXPORT TaprootSpendScriptData {
+    InPlaceArray<unsigned char> scriptData;
+
+    size_t realSize() const {
+      return sizeof(TaprootSpendScriptData) + scriptData.extraSize();
+    }
+
+    explicit TaprootSpendScriptData(uint32_t scriptLength) : scriptData(scriptLength) {
+    }
+  };
+
   struct BLOCKSCI_EXPORT WitnessUnknownSpendScriptData {
     InPlaceArray<unsigned char> scriptData;
 

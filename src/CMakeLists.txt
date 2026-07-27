@@ -91,6 +91,8 @@ set(CORE_HEADERS
   ${BLOCKSCI_HEADER_PREFIX}/core/script_data.hpp
   ${BLOCKSCI_HEADER_PREFIX}/core/transaction_data.hpp
   ${BLOCKSCI_HEADER_PREFIX}/core/typedefs.hpp
+  ${BLOCKSCI_HEADER_PREFIX}/core/witness_stack.hpp
+  ${BLOCKSCI_HEADER_PREFIX}/core/witness_program.hpp
 )
 
 set(BLOCKSCI_HEADERS
@@ -166,6 +168,7 @@ set(SCRIPT_HEADERS
   ${BLOCKSCI_HEADER_PREFIX}/scripts/script_variant.hpp
   ${BLOCKSCI_HEADER_PREFIX}/scripts/script.hpp
   ${BLOCKSCI_HEADER_PREFIX}/scripts/scripthash_script.hpp
+  ${BLOCKSCI_HEADER_PREFIX}/scripts/taproot_script.hpp
 )
 
 set(SCRIPT_PRIVATE_HEADERS
@@ -190,6 +193,7 @@ set(SCRIPT_SOURCES
   ${BLOCKSCI_SOURCE_PREFIX}/scripts/script_range.cpp
   ${BLOCKSCI_SOURCE_PREFIX}/scripts/script_variant.cpp
   ${BLOCKSCI_SOURCE_PREFIX}/scripts/scripthash_script.cpp
+  ${BLOCKSCI_SOURCE_PREFIX}/scripts/taproot_script.cpp
 )
 
 set(HEURISTICS_HEADERS
